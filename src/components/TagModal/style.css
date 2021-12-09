@@ -1,0 +1,31 @@
+.tag__modal {
+  width: 350px;
+  height: 220px;
+  background-color: #fff;
+  border-radius: 10px;
+  position: absolute;
+  top: 30%;
+  left: 30%;
+  bottom: 0;
+  right: 0;
+  box-shadow: -1px -1px 9px 2px rgba(0, 0, 0, 0.4);
+  -webkit-box-shadow: -1px -1px 9px 2px rgba(0, 0, 0, 0.4);
+  -moz-box-shadow: -1px -1px 9px 2px rgba(0, 0, 0, 0.4);
+}
+.tag__header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-bottom: 1px solid #ccc;
+  padding: 7px;
+}
+.tag__input {
+  width: 85%;
+  padding: 2px;
+  font-size: 16px;
+  border: none;
+  outline: none;
+}
+.tag__body {
+  overflow-y: scroll;
+}
