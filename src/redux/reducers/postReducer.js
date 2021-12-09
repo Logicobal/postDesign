@@ -2,6 +2,7 @@ import ACTIONS from '../actions';
 
 const initialState = {
   modal: false,
+  caption: '',
 };
 
 const postReducer = (state = initialState, action) => {
@@ -9,7 +10,12 @@ const postReducer = (state = initialState, action) => {
     case ACTIONS.TAGMODAL:
       return {
         ...state,
-        modal: true,
+        modal: action.payload,
+      };
+    case ACTIONS.GETCAPTION:
+      return {
+        ...state,
+        caption: action.payload,
       };
     default:
       return state;

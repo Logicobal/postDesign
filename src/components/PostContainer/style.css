@@ -13,6 +13,7 @@
 .left__section {
   width: 45%;
   height: 100%;
+  overflow-y: scroll;
 }
 .textInput {
   margin: 10px;
