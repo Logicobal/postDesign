@@ -1,4 +1,4 @@
-import React, { useState, createRef, useEffect } from 'react';
+import React, { useState, createRef, useRef, useEffect } from 'react';
 import './style.css';
 import Avatar from '../Avatar';
 import Emoji from '../Emojis';
@@ -10,15 +10,28 @@ import {
 } from '../../redux/actions/postAction';
 
 const PostContainer = () => {
-  const [caption, setCaption] = useState('');
+  const [clickedOutside, setClickedOutside] = useState(false);
 
+  const [clickedOutsideEmoji, setClickedOutsideEmoji] = useState(false);
+
+  const [caption, setCaption] = useState('');
+  const focusImg = useRef();
+  const focusEmoji = useRef();
   const modal = useSelector((state) => state.post.modal);
   // const caption = useSelector((state) => state.post.caption);
 
   const dispatch = useDispatch();
 
   const showToggle = (e) => {
+    setClickedOutside(false);
     dispatch(dispatchTagModal(!modal));
+
+    let left = e.clientX - 320 + 'px';
+    let top = e.clientY - 85 + 'px';
+
+    let tagModal = document.querySelector('.modal__wrapper');
+    tagModal.style.left = left;
+    tagModal.style.top = top;
   };
 
   // Emoji
@@ -40,6 +53,7 @@ const PostContainer = () => {
 
   const handleShowEmojis = () => {
     inputRef.current.focus();
+    setClickedOutsideEmoji(false);
     setShowEmojis(!showEmojis);
   };
 
@@ -52,9 +66,48 @@ const PostContainer = () => {
     inputRef.current.selectionEnd = cursorPosition;
   }, [cursorPosition]);
 
+  const handleClickOutside = (e) => {
+    let tagModal = document.querySelector('.modal__wrapper');
+    let tagHeader = document.querySelector('.tag__header');
+    let appBody = document.querySelector('.app__body');
+    console.log(e.target);
+    console.log(appBody);
+    if (
+      !focusImg.current.contains(e.target) &&
+      !e.target.parentNode.contains(tagModal) &&
+      !e.target.parentNode.contains(tagHeader) &&
+      !e.target.parentNode.contains(appBody)
+    ) {
+      setClickedOutside(true);
+      dispatch(dispatchTagModal(false));
+    }
+  };
+
+  const handleClickOutsideEmoji = (e) => {
+    // let tagModal = document.querySelector('.modal__wrapper');
+    // let tagHeader = document.querySelector('.tag__header');
+    // let appBody = document.querySelector('.app__body');
+    if (!focusEmoji.current.contains(e.target)) {
+      setClickedOutsideEmoji(true);
+      setShowEmojis(false);
+    }
+  };
+
+  // const handleClickInside = () => setClickedOutside(false);
+
+  useEffect(() => {
+    document.addEventListener('mousedown', handleClickOutside);
+    return () => document.removeEventListener('mousedown', handleClickOutside);
+  });
+  // useEffect(() => {
+  //   document.addEventListener('mousedown', handleClickOutsideEmoji);
+  //   return () =>
+  //     document.removeEventListener('mousedown', handleClickOutsideEmoji);
+  // });
+
   return (
     <div className='post_inner_container'>
-      <div className='right__section' onClick={showToggle}>
+      <div className='right__section' onClick={showToggle} ref={focusImg}>
         <img
           src='https://cdn-prod.medicalnewstoday.com/content/images/articles/325/325466/man-walking-dog.jpg'
           alt='insta img'
@@ -76,7 +129,7 @@ const PostContainer = () => {
           value={caption}
         />
         <div className='bottom_text'>
-          <BsEmojiSmile onClick={handleShowEmojis} />
+          <BsEmojiSmile onClick={handleShowEmojis} ref={focusEmoji} />
           <p>{caption.length}/2,220</p>
         </div>
         {showEmojis && <Emoji pickEmoji={pickEmoji} />}
