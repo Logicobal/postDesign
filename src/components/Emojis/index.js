@@ -4,10 +4,16 @@ import EmojiPicker from 'emoji-picker-react';
 
 const Emojis = ({ pickEmoji }) => {
   return (
-    <div>
+    <div className='emoji__container' style={styles.container}>
       <EmojiPicker onEmojiClick={pickEmoji} />
     </div>
   );
+};
+
+const styles = {
+  container: {
+    width: 'fit-content',
+  },
 };
 
 Emojis.propTypes = {

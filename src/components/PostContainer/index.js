@@ -23,6 +23,7 @@ const PostContainer = () => {
   const dispatch = useDispatch();
 
   const showToggle = (e) => {
+    setShowEmojis(false);
     setClickedOutside(false);
     dispatch(dispatchTagModal(!modal));
 
@@ -55,6 +56,7 @@ const PostContainer = () => {
     inputRef.current.focus();
     setClickedOutsideEmoji(false);
     setShowEmojis(!showEmojis);
+    dispatch(dispatchTagModal(false));
   };
 
   const handleChange = (e) => {
@@ -67,31 +69,44 @@ const PostContainer = () => {
   }, [cursorPosition]);
 
   const handleClickOutside = (e) => {
-    let tagModal = document.querySelector('.modal__wrapper');
-    let tagHeader = document.querySelector('.tag__header');
-    let appBody = document.querySelector('.app__body');
-    console.log(e.target);
-    console.log(appBody);
-    if (
-      !focusImg.current.contains(e.target) &&
-      !e.target.parentNode.contains(tagModal) &&
-      !e.target.parentNode.contains(tagHeader) &&
-      !e.target.parentNode.contains(appBody)
-    ) {
-      setClickedOutside(true);
-      dispatch(dispatchTagModal(false));
+    if (e.target.closest('.emoji__container')) {
+      console.log(e.target);
+    }
+    if (modal === false && showEmojis === true) {
+      // let emjiContainer = document.querySelector('.emoji__container');
+      if (
+        !focusEmoji.current.contains(e.target) &&
+        !e.target.closest('.emoji__container')
+      ) {
+        setClickedOutsideEmoji(true);
+        setShowEmojis(false);
+      }
+    }
+    if (showEmojis === false && modal === true) {
+      let tagModal = document.querySelector('.modal__wrapper');
+      let tagHeader = document.querySelector('.tag__header');
+      let appBody = document.querySelector('.app__body');
+      if (
+        !focusImg.current.contains(e.target) &&
+        !e.target.parentNode.contains(tagModal) &&
+        !e.target.parentNode.contains(tagHeader) &&
+        !e.target.parentNode.contains(appBody)
+      ) {
+        setClickedOutside(true);
+        dispatch(dispatchTagModal(false));
+      }
     }
   };
 
-  const handleClickOutsideEmoji = (e) => {
-    // let tagModal = document.querySelector('.modal__wrapper');
-    // let tagHeader = document.querySelector('.tag__header');
-    // let appBody = document.querySelector('.app__body');
-    if (!focusEmoji.current.contains(e.target)) {
-      setClickedOutsideEmoji(true);
-      setShowEmojis(false);
-    }
-  };
+  // const handleClickOutsideEmoji = (e) => {
+  // 	// let tagModal = document.querySelector('.modal__wrapper');
+  // 	// let tagHeader = document.querySelector('.tag__header');
+  // 	// let appBody = document.querySelector('.app__body');
+  // 	if (!focusEmoji.current.contains(e.target)) {
+  // 		setClickedOutsideEmoji(true);
+  // 		setShowEmojis(false);
+  // 	}
+  // };
 
   // const handleClickInside = () => setClickedOutside(false);
 
@@ -129,7 +144,9 @@ const PostContainer = () => {
           value={caption}
         />
         <div className='bottom_text'>
-          <BsEmojiSmile onClick={handleShowEmojis} ref={focusEmoji} />
+          <div onClick={handleShowEmojis} ref={focusEmoji}>
+            <BsEmojiSmile />
+          </div>
           <p>{caption.length}/2,220</p>
         </div>
         {showEmojis && <Emoji pickEmoji={pickEmoji} />}
