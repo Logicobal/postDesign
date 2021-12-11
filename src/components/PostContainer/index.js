@@ -27,8 +27,13 @@ const PostContainer = () => {
     setClickedOutside(false);
     dispatch(dispatchTagModal(!modal));
 
-    let left = e.clientX - 340 + 'px';
-    let top = e.clientY - 84 + 'px';
+    let rect = e.target.getBoundingClientRect();
+
+    let left = e.clientX - rect.left - 30 + 'px';
+    let top = e.clientY - rect.top + 50 + 'px';
+
+    // let left = e.clientX - 340 + 'px';
+    // let top = e.clientY - 84 + 'px';
 
     let tagModal = document.querySelector('.modal__wrapper');
     tagModal.style.left = left;
