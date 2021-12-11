@@ -27,8 +27,8 @@ const PostContainer = () => {
     setClickedOutside(false);
     dispatch(dispatchTagModal(!modal));
 
-    let left = e.clientX - 320 + 'px';
-    let top = e.clientY - 85 + 'px';
+    let left = e.clientX - 340 + 'px';
+    let top = e.clientY - 84 + 'px';
 
     let tagModal = document.querySelector('.modal__wrapper');
     tagModal.style.left = left;
